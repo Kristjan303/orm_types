@@ -21,7 +21,7 @@ router.post('/comment', async (req: Request, res: Response) => {
 
 router.get('/comment', async (req: Request, res: Response) => {
     try{
-        const data = await Comment.find();
+        const data = await Comment.find().populate('article');
         res.json(data)
     }
     catch(error){

@@ -1,8 +1,10 @@
-import express, { Express, Request, Response } from "express";
-import mongoose from "mongoose";
+import express, {Express, Request, Response} from "express";
 import stringsController from "./controllers/strings";
-import articleController from "./controllers/articleController";
+import mongoose from "mongoose";
+import ArticleController from "./controllers/articleController";
 import commentController from "./controllers/commentController";
+import authorController from "./controllers/authorController";
+
 
 const app: Express = express();
 app.use(express.json());
@@ -21,13 +23,11 @@ database.once('connected', () => {
 app.get('/', (req: Request, res: Response) => {
     res.send('Express + TypeScript Server');
 });
-
 app.use('/', stringsController);
-app.use('/', articleController);
+app.use('/', ArticleController);
 app.use('/', commentController);
+app.use('/', authorController);
 
-
-
-app.listen(3000,() => {
+app.listen(3000, () => {
     console.log(`[server]: Server is running at http://localhost:3000`);
 });

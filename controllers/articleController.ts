@@ -68,7 +68,6 @@ router.put('/article/:id', async (req: Request, res: Response) => {
     }
 })
 
-
 router.post('/article/:id/comment', async (req: Request, res: Response) => {
     try{
         const id = req.params.id;
@@ -78,25 +77,22 @@ router.post('/article/:id/comment', async (req: Request, res: Response) => {
             date: new Date(),
             content: req.body.content,
             article: id
-        })
-
-        data.save(async (err, comment) => {
-            const result = await Article.findByIdAndUpdate(
-                { _id: id },
-                { $push: {
-                        comments: comment._id
-                    }
-                }, options
-            )
-
-            res.send(result)
         });
+
+        const comment = await data.save();
+
+        const result = await Article.findByIdAndUpdate(
+            id,
+            { $push: { comments: comment._id } },
+            options
+        );
+
+        res.send(result);
     }
     catch(error){
-        res.status(500).json({message: error})
+        res.status(500).json({message: error});
     }
-})
-
+});
 router.get('/article/:id/comment', async (req: Request, res: Response) => {
     try{
         const id = req.params.id;
@@ -109,6 +105,5 @@ router.get('/article/:id/comment', async (req: Request, res: Response) => {
         res.status(500).json({message: error})
     }
 })
-
 
 export default router;
